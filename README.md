@@ -480,7 +480,7 @@ Here are some ways you can use the Property Manager CLI to meet your business ne
 
 If you also use the Property Manager UI, make sure your client side files are in sync with the latest property version on the network.
 
-To retrieve all updates from the latest property version, run this command: `akamai property-manager update-local -p <property_name>`. <br> The `update-local` command overrides any locally-saved configuration version with the latest active property version.
+To retrieve all updates from the latest, staging or production property version, run this command: `akamai property-manager update-local -p <property_name> -n <network>`. <br> The `update-local` command overrides any locally-saved configuration version with the latest or network active property version.
 
 ## Retrieve a specific rule from Property Manager
 
