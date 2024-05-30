@@ -173,6 +173,13 @@ class DevopsPropertyManager extends Devops {
         }
         let propertyInfo = await project.getPropertyInfo(envInfo.propertyId);
 
+        if (createPropertyInfo.network === 'STAGING') {
+            propertyInfo.propertyVersion = envInfo.activeIn_STAGING_Info.propertyVersion
+        }
+
+        if (createPropertyInfo.network === 'PRODUCTION') {
+            propertyInfo.propertyVersion = envInfo.activeIn_PRODUCTION_Info.propertyVersion
+        }
 
         ruleTree = await project.getPropertyRuleTree(envInfo.propertyId, propertyInfo.propertyVersion);
         let projectInfo = project.getProjectInfo();
