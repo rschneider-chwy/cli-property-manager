@@ -129,6 +129,14 @@ class DevopsPropertyManager extends Devops {
         createPropertyInfo.propertyId = helpers.parsePropertyId(results.versions.items[0].propertyId);
         let propertyInfo = await project.getPropertyInfo(createPropertyInfo.propertyId);
 
+        if (createPropertyInfo.network === 'STAGING') {
+            propertyInfo.propertyVersion = propertyInfo.productionVersion
+        }
+
+        if (createPropertyInfo.network === 'PRODUCTION') {
+            propertyInfo.propertyVersion = propertyInfo.stagingVersion
+        }
+
         createPropertyInfo.propertyVersion = propertyInfo.propertyVersion;
         logger.info(`Attempting to load rule tree for property id: ${createPropertyInfo.propertyId} and version: ${createPropertyInfo.propertyVersion}`);
         let ruleTree = await project.getPropertyRuleTree(createPropertyInfo.propertyId, createPropertyInfo.propertyVersion);
@@ -162,7 +170,8 @@ class DevopsPropertyManager extends Devops {
             throw new errors.ArgumentError(`Property folder '${createPropertyInfo.projectName}' does not exist`,
                 "property_folder_does_not_exist", createPropertyInfo.projectName);
         }
-        let envInfo = project.loadEnvironmentInfo();
+
+       let envInfo = project.loadEnvironmentInfo();
 
         if (_.isString(envInfo.propertyName) && !_.isNumber(envInfo.propertyId)) {
             let results = await this.getPAPI().findProperty(envInfo.propertyName);
@@ -171,14 +180,15 @@ class DevopsPropertyManager extends Devops {
             }
             envInfo.propertyId = helpers.parsePropertyId(results.versions.items[0].propertyId);
         }
+
         let propertyInfo = await project.getPropertyInfo(envInfo.propertyId);
 
         if (createPropertyInfo.network === 'STAGING') {
-            propertyInfo.propertyVersion = envInfo.activeIn_STAGING_Info.propertyVersion
+            propertyInfo.propertyVersion = propertyInfo.productionVersion
         }
 
         if (createPropertyInfo.network === 'PRODUCTION') {
-            propertyInfo.propertyVersion = envInfo.activeIn_PRODUCTION_Info.propertyVersion
+            propertyInfo.propertyVersion = propertyInfo.stagingVersion
         }
 
         ruleTree = await project.getPropertyRuleTree(envInfo.propertyId, propertyInfo.propertyVersion);

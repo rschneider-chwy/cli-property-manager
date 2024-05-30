@@ -365,7 +365,9 @@ class Project {
             contractId: versionInfo.contractId,
             groupId: versionInfo.groupId,
             productId: versionInfo.versions.items[0].productId,
-            propertyVersion: versionInfo.versions.items[0].propertyVersion
+            propertyVersion: versionInfo.versions.items[0].propertyVersion,
+            stagingVersion: versionInfo.versions.items[0].stagingVersion,
+            productionVersion: versionInfo.versions.items[0].productionVersion,
         }
     }
 
