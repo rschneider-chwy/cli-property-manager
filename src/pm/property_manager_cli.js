@@ -664,7 +664,13 @@ Are you sure you want to DELETE the property '${options.property}'?`,
     const update = async function(devops, options) {
         let runPull = options.forceUpdate;
         let projectName = devops.extractProjectName(options);
-        let network = commonCli.checkNetworkName(options);
+        let network;
+
+        if (options.network) {
+            network = commonCli.checkNetworkName(options);
+        } else {
+            network = null
+        }
 
         if (!runPull) {
             var questions = [{
@@ -701,12 +707,17 @@ Are you sure you want to DELETE the property '${options.property}'?`,
                 let project = await devops.updateProperty(createPropertyInfo);
                 let envInfo = project.loadEnvironmentInfo()
 
+                // check and grab the appropriate version
                 if (createPropertyInfo.network === 'STAGING') {
                     createPropertyInfo.propertyVersion = envInfo.activeIn_STAGING_Info.propertyVersion
                 }
-        
+
                 if (createPropertyInfo.network === 'PRODUCTION') {
                     createPropertyInfo.propertyVersion = envInfo.activeIn_PRODUCTION_Info.propertyVersion
+                }
+
+                if (!createPropertyInfo.network) {
+                    createPropertyInfo.propertyVersion = envInfo.latestVersionInfo.propertyVersion
                 }
 
                 consoleLogger.info(`Updated ${project.getName()} to the latest: v${createPropertyInfo.propertyVersion}`);
