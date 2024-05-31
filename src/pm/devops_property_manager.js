@@ -163,8 +163,7 @@ class DevopsPropertyManager extends Devops {
             throw new errors.ArgumentError(`Property folder '${createPropertyInfo.projectName}' does not exist`,
                 "property_folder_does_not_exist", createPropertyInfo.projectName);
         }
-
-       let envInfo = project.loadEnvironmentInfo();
+        let envInfo = project.loadEnvironmentInfo();
 
         if (_.isString(envInfo.propertyName) && !_.isNumber(envInfo.propertyId)) {
             let results = await this.getPAPI().findProperty(envInfo.propertyName);
@@ -175,8 +174,8 @@ class DevopsPropertyManager extends Devops {
         }
         let propertyInfo = await project.getPropertyInfo(envInfo.propertyId, null, createPropertyInfo.network);
 
-        project.propertyVersion = propertyInfo.propertyVersion
-        ruleTree = await project.getPropertyRuleTree(envInfo.propertyId, project.propertyVersion);
+
+        ruleTree = await project.getPropertyRuleTree(envInfo.propertyId, propertyInfo.propertyVersion);
         let projectInfo = project.getProjectInfo();
         let isSecure = ruleTree.rules.options.is_secure;
         projectInfo.secureOption = isSecure;
