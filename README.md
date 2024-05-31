@@ -129,7 +129,7 @@ Here’s a typical workflow when you want to break your Property Manager configu
 
     * Do you need any new supporting processes? For example, if different teams are involved, how will you manage ownership of the different templates?
 
-1. Import an existing property by running the `akamai property-manager import` command. This creates a local instance of your configuration. You can also create a new property if needed.
+1. Import an existing property by running the `akamai property-manager import --network <network>` command. This creates a local instance of your configuration. You can also create a new property if needed.
 
 1. Verify that the `/config-snippets` folder contains a separate JSON-based configuration snippet for each rule in your property configuration. <br> In this folder, the `main.json` file ties all the snippets together. It lists the available snippets and contains the local permissions for each snippet.
 
@@ -215,7 +215,7 @@ Create your local client side snippets to let different teams own different part
 
 1. Determine how to handle any [custom user variables](#using-property-manager-user-variables).
 
-1. Run the `akamai property-manager import` command to create a local instance of your Property Manager configuration.
+1. Run the `akamai property-manager import --network <network>` command to create a local instance of your Property Manager configuration.
 
 1. In your project directory structure, navigate to the new `config-snippets` folder. <br> This folder contains a separate JSON-based configuration snippet for each rule in your property configuration.
 
