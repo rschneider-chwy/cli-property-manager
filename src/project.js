@@ -348,14 +348,15 @@ class Project {
     /**
      * @param propertyId
      * @param version
+     * @param network
      * @return {Promise.<*>}
      */
 
-    async getPropertyInfo(propertyId, version) {
+    async getPropertyInfo(propertyId, version, network) {
         let papi = this.dependencies.getPAPI();
         let versionInfo;
         if (!_.isNumber(version)) {
-            versionInfo = await papi.latestPropertyVersion(propertyId);
+            versionInfo = await papi.latestPropertyVersion(propertyId, network);
         } else {
             versionInfo = await papi.getPropertyVersion(propertyId, version);
         }
@@ -365,9 +366,7 @@ class Project {
             contractId: versionInfo.contractId,
             groupId: versionInfo.groupId,
             productId: versionInfo.versions.items[0].productId,
-            propertyVersion: versionInfo.versions.items[0].propertyVersion,
-            stagingVersion: versionInfo.versions.items[0].stagingVersion,
-            productionVersion: versionInfo.versions.items[0].productionVersion,
+            propertyVersion: versionInfo.versions.items[0].propertyVersion
         }
     }
 

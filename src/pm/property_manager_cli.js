@@ -614,6 +614,7 @@ Are you sure you want to deactivate the property '${propertyName}' on network '$
     const importProperty = async function(devops, options) {
         let propertyName = options.property;
         let network;
+        let environment;
         if (!propertyName || _.isBoolean(propertyName)) {
             throw new errors.DependencyError("Missing property option! Use akamai property-manager import -p <property name> ...",
                 "missing_property_name");
@@ -621,8 +622,10 @@ Are you sure you want to deactivate the property '${propertyName}' on network '$
 
         if (options.network) {
             network = commonCli.checkNetworkName(options);
+            environment = network
         } else {
             network = null
+            environment = 'LATEST'
         }
 
         consoleLogger.info(`Importing and creating local files for ${propertyName} from Property Manager...`);
@@ -644,7 +647,8 @@ Are you sure you want to deactivate the property '${propertyName}' on network '$
             consoleLogger.info("update property info: ", helpers.jsonStringify(createPropertyInfo));
         } else {
             let project = await devops.importProperty(createPropertyInfo);
-            consoleLogger.info(`Imported ${project.getName()}. The latest version is: v${project.loadEnvironmentInfo().latestVersionInfo.propertyVersion}`);
+
+            consoleLogger.info(`Imported ${project.getName()}. The ${environment} version is: v${project.propertyVersion}`);
 
         }
     };
@@ -677,8 +681,10 @@ Are you sure you want to DELETE the property '${options.property}'?`,
 
         if (options.network) {
             network = commonCli.checkNetworkName(options);
+            environment = network
         } else {
             network = null
+            environment = 'LATEST'
         }
 
         if (!runPull) {
@@ -714,22 +720,8 @@ Are you sure you want to DELETE the property '${options.property}'?`,
             } else {
                 consoleLogger.info(`Updating and overwriting local files for ${projectName} from PAPI...`);
                 let project = await devops.updateProperty(createPropertyInfo);
-                // work on streamlining to load
-                let envInfo = project.loadEnvironmentInfo()
-                let propertyInfo = await project.getPropertyInfo(envInfo.propertyId);
-                let environment = 'latest'
 
-                if (createPropertyInfo.network === 'STAGING') {
-                    propertyInfo.propertyVersion = propertyInfo.productionVersion
-                    environment = 'staging'
-                }
-
-                if (createPropertyInfo.network === 'PRODUCTION') {
-                    propertyInfo.propertyVersion = propertyInfo.stagingVersion
-                    environment = 'production'
-                }
-
-                consoleLogger.info(`Updated ${project.getName()} to ${environment}: v${propertyInfo.propertyVersion}`);
+                consoleLogger.info(`Updated ${project.getName()} to ${environment}: v${project.propertyVersion}`);
             }
         }
 
