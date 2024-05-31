@@ -127,7 +127,7 @@ class DevopsPropertyManager extends Devops {
                 "property_does_not_exist_on_server", createPropertyInfo.propertyName);
         }
         createPropertyInfo.propertyId = helpers.parsePropertyId(results.versions.items[0].propertyId);
-        let propertyInfo = await project.getPropertyInfo(createPropertyInfo.propertyId, null, createPropertyInfo.network);
+        let propertyInfo = await project.getPropertyInfo(createPropertyInfo.propertyId, createPropertyInfo.propertyVersion, createPropertyInfo.network);
 
         project.propertyVersion = propertyInfo.propertyVersion;
         createPropertyInfo.propertyVersion = propertyInfo.propertyVersion;
@@ -172,9 +172,9 @@ class DevopsPropertyManager extends Devops {
             }
             envInfo.propertyId = helpers.parsePropertyId(results.versions.items[0].propertyId);
         }
-        let propertyInfo = await project.getPropertyInfo(envInfo.propertyId, null, createPropertyInfo.network);
+        let propertyInfo = await project.getPropertyInfo(envInfo.propertyId, createPropertyInfo.propertyVersion, createPropertyInfo.network);
 
-
+        project.propertyVersion = propertyInfo.propertyVersion
         ruleTree = await project.getPropertyRuleTree(envInfo.propertyId, propertyInfo.propertyVersion);
         let projectInfo = project.getProjectInfo();
         let isSecure = ruleTree.rules.options.is_secure;
